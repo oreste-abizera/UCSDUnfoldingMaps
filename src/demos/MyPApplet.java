@@ -8,6 +8,7 @@ import processing.core.PImage;
  * Used in module 3 of the UC San Diego MOOC Object Oriented Programming in Java
  * 
  * @author UC San Diego Intermediate Software Development MOOC team
+ * @author Oreste Abizera
  * 
  *
  */
@@ -51,7 +52,7 @@ public class MyPApplet extends PApplet{
 	
 	public static void main (String[] args) {
 		//Add main method for running as application
-		PApplet.main(new String[] {"--present", "MyPApplet"});
+		PApplet.main(new String[] {MyPApplet.class.getName()});
 	}
 }
 

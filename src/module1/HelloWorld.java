@@ -12,7 +12,7 @@ import java.io.Serial;
 
 /** HelloWorld
  * An application with two maps side-by-side zoomed in on different locations.
- * Author: UC San Diego Coursera Intermediate Programming team
+ * Author: UC San Diego Intermediate Software Development MOOC team
  * @author Oreste Abizera
  * Date: April 26, 2024
  * */

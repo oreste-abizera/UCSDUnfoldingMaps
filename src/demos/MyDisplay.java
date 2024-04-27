@@ -7,6 +7,7 @@ import processing.core.PApplet;
  * Used in module 3 of the UC San Diego MOOC Object Oriented Programming in Java
  * 
  * @author UC San Diego Intermediate Software Development MOOC team
+ * @author Oreste Abizera
  * 
  *
  */
@@ -30,5 +31,8 @@ public class MyDisplay extends PApplet {
 		noFill();
 		arc(200, 280, 75, 75, 0, PI);
 	}
-	
+
+	public static void main(String[] args){
+		PApplet.main(new String[]{MyDisplay.class.getName()});
+	}
 }
