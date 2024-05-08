@@ -47,7 +47,7 @@ public class EarthquakeCityMapDemo extends PApplet {
 
 	
 	public void setup() {
-		size(950, 600, OPENGL);
+		size(950, 600);
 
 		// Assume online
 		map = new UnfoldingMap(this, 200, 50, 700, 500, new Google.GoogleMapProvider());
@@ -193,5 +193,9 @@ public class EarthquakeCityMapDemo extends PApplet {
 	{	
 		// Remember you can use Processing's graphics methods here
 	
+	}
+
+	public static void main(String[] args){
+		PApplet.main(new String[]{EarthquakeCityMapDemo.class.getName()});
 	}
 }
