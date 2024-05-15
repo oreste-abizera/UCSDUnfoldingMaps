@@ -8,6 +8,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
+import de.fhpotsdam.unfolding.providers.CartoDB;
 import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
@@ -15,6 +16,7 @@ import parsing.ParseFeed;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** EarthquakeCityMap
@@ -63,16 +65,19 @@ public class EarthquakeCityMap extends PApplet {
 	// NEW IN MODULE 5
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
+
+	// Variable to track marker visibility
+	private boolean markersVisible = true;
 	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
-		size(900, 700, OPENGL);
+		size(900, 700);
 		if (offline) {
 		    map = new UnfoldingMap(this, 200, 50, 650, 600, new MBTilesMapProvider(mbTilesString));
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new CartoDB.Positron());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    //earthquakesURL = "2.5_week.atom";
 		}
@@ -81,10 +86,10 @@ public class EarthquakeCityMap extends PApplet {
 		// FOR TESTING: Set earthquakesURL to be one of the testing files by uncommenting
 		// one of the lines below.  This will work whether you are online or offline
 		//earthquakesURL = "test1.atom";
-		//earthquakesURL = "test2.atom";
+		earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
-		//earthquakesURL = "quiz2.atom";
+		earthquakesURL = "quiz2.atom";
 		
 		
 		// (2) Reading in earthquake data and geometric properties
@@ -116,6 +121,8 @@ public class EarthquakeCityMap extends PApplet {
 
 	    // could be used for debugging
 	    printQuakes();
+
+		sortAndPrint(20);
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
@@ -130,14 +137,24 @@ public class EarthquakeCityMap extends PApplet {
 	public void draw() {
 		background(0);
 		map.draw();
-		addKey();
+		if (markersVisible) {
+			addKey();
+		}
 		
 	}
 	
 	
-	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
-	// and then call that method from setUp
+	// DONE: Add the method:
+	   private void sortAndPrint(int numToPrint){
+		   Object[] quakes = quakeMarkers.toArray();
+		   // Sort the array in reverse order of their magnitude
+		   Arrays.sort(quakes);
+
+		   int limit = Math.min(numToPrint, quakes.length);
+		   for (int i = 0; i < limit; i++) {
+			   System.out.println(quakes[i]);
+		   }
+	   }
 	
 	/** Event handler that gets called automatically when the 
 	 * mouse moves.
@@ -407,6 +424,23 @@ public class EarthquakeCityMap extends PApplet {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void keyPressed() {
+		if (key == 'm' || key == 'M') {
+			markersVisible = !markersVisible;
+			for (Marker marker : quakeMarkers) {
+				marker.setHidden(!markersVisible);
+			}
+			for (Marker marker : cityMarkers) {
+				marker.setHidden(!markersVisible);
+			}
+		}
+	}
+
+	public static void main(String[] args){
+		PApplet.main(new String[]{EarthquakeCityMap.class.getName()});
 	}
 
 }
